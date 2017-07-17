@@ -1,0 +1,11 @@
+#!/bin/sh
+firstnozzle=$1; shift
+cd ~/CEL\ Robox/PrintJobs
+job=`/bin/ls -t | head -1`
+mkdir -p ~/gcode
+replicator.py $job/$job\_robox.gcode $* | firstnozzle.py $firstnozzle | refine.py > ~/gcode/currentjob.gcode
+
+
+
+
+

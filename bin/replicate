@@ -1,0 +1,8 @@
+#!/bin/sh
+cd ~/CEL\ Robox/PrintJobs
+job=`/bin/ls -t | head -1`
+mkdir -p ~/gcode
+replicator.py $job/$job\_robox.gcode $* | refine.py > ~/gcode/currentjob.gcode
+
+
+
