@@ -167,7 +167,8 @@ while count < len(buffer):
     line=buffer[count]
     lL=rL.findall(line)
     if len(lL) > 0:
-        if int(lL[0]) == 1:
+        L=int(lL[0])
+        if L == 1:
             Heater="M104"
             buffer.insert(count,"M140\n")
             index.insert(count,index[count])
@@ -182,7 +183,7 @@ while count < len(buffer):
                 buffer.insert(count1,Heater+" S0\n")
                 index.insert(count1,index[count1])
                 count += 1
-                if time-index[count1] > primetime:
+                if L == 0 and time-index[count1] > primetime:
                     buffer.insert(count+1,primesuffixD)
                     index.insert(count,index[count])
                     count += 1
@@ -199,7 +200,7 @@ while count < len(buffer):
                 buffer.insert(count0,Heater+" T0\n")
                 index.insert(count0,index[count0])
                 count += 1
-                if time-index[count0] > primetime:
+                if L == 0 and time-index[count0] > primetime:
                     buffer.insert(count+1,primesuffixE)
                     index.insert(count,index[count])
                     count += 1
