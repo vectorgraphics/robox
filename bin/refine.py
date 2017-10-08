@@ -3,6 +3,7 @@ import fileinput
 import sys
 import re
 import math
+import os
 
 numeric="([-+]?(?:(?: \d* \. \d+ )|(?: \d+ \.? )))"
 rX=re.compile("X"+numeric,re.VERBOSE)
@@ -38,8 +39,7 @@ replenishD=0
 replenishE=0
 #interface=False
 #lastinterface=False
-incr=0.04 #For PETG
-incr=0 #For PVB
+incr=[0,0]
 current=[]
 previous=[]
 
@@ -48,13 +48,16 @@ threshold=1.0/3.0
 e=1 # extrusion error
 
 #PETG=[False,False]
-#PETG=[False,True]
-PETG=[True,False]
+PETG=[False,True]
+#PETG=[True,False]
 #PETG=[True,True]
+
+#TODO: simplfy code
 
 if(PETG[0] == True):
   primeDLength=8
   firstDfactor=1.1
+#  incr[0]=0.04
 else:
   primeDLength=0
   firstDfactor=1.0
@@ -62,11 +65,12 @@ else:
 if(PETG[1] == True):
   primeELength=8
   firstEfactor=1.1
+#  incr[1]=0.04
 else:
   primeELength=0
   firstEfactor=1.0
 
-file=open("/u/bowman/map.dat", "r")
+file=open(os.path.expanduser("~/map.dat"), "r")
 x=[float(a) for a in file.readline().split()]
 y=[float(a) for a in file.readline().split()]
 z=[[float(a) for a in line.split()] for line in file]
@@ -167,10 +171,13 @@ for line in fileinput.input():
         outer=re.match(";TYPE:WALL-OUTER",line)
         support=re.match(";TYPE:SUPPORT",line)
     lF=rF.findall(line)
+    lT=rT.findall(line)
+    if len(lT) > 0:
+      T=int(lT[0])
     if L == 0 and len(lX) > 0 and len(lY) > 0:
       line=line.replace("Y"+Y,"Y"+Y+" Z"+str(round(Z+height(float(X),float(Y)),3)))
     if L > 0 and len(lZ) > 0:
-        line=line.replace("Z"+lZ[0],"Z"+str(Z+incr))
+        line=line.replace("Z"+lZ[0],"Z"+str(Z+incr[T]))
         if(Z != lastZ):
             if(Z > lastZ):
                 previous=current
@@ -182,9 +189,6 @@ for line in fileinput.input():
 #        interface=True
     lD=rD.findall(line)
     lE=rE.findall(line)
-    lT=rT.findall(line)
-    if len(lT) > 0:
-      T=int(lT[0])
     petg=PETG[T]
     if re.match("G1",line) and len(lF) > 0 and lF[0] != "12000":
 #        if lastinterface and petg and not support:
