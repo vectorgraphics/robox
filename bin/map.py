@@ -28,6 +28,20 @@ yoffset=ygap+(Y-(ny-1)*my)/2
 
 z=0
 
+def wait():
+    global z
+    output=""
+    time.sleep(1)
+    while True:
+        line=str(subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","M114"]))
+#        sys.stdout.write(line+"\n")
+        z=float(rZ.findall(str(line))[0])
+        if line == output and z <= 0.2:
+            break
+        time.sleep(0.5)
+        output=line
+    return
+
 subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","M139"])
 subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G0 Z4"])
 subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G0 Z2"])
@@ -47,6 +61,7 @@ def probe(x0,y0):
     subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G0 Z2"])
     subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G0 X"+str(x0)+"Y"+str(y0)])
     subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G28 Z"])
+    wait()
     subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G0 Z2"])
     return subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","M113"])
 
