@@ -48,11 +48,11 @@ threshold=1.0/3.0
 e=1 # extrusion error
 
 #PETG=[False,False]
-PETG=[False,True]
-#PETG=[True,False]
+#PETG=[False,True]
+PETG=[True,False]
 #PETG=[True,True]
 
-#TODO: simplfy code
+#TODO: simplify code
 
 if(PETG[0] == True):
   primeDLength=8
