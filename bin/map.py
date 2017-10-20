@@ -71,13 +71,20 @@ subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G28 Z"])
 subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G39 S1.0"])
 
 Z0=[0]*nx
-z0=0
+n=4
+
+for j in range(n):
+    z0=0
+    for i in range(nx):
+        x0=xoffset+i*mx
+        line=probe(x0,yoffset)
+        z0 += float(rdelta.findall(str(line))[0])
+        Z0[i] += z0
+    subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G0 X105Y75"])
+    subprocess.check_output(["sudo","/u/bowman/bin/rbx","gcode","G28 Z"])
 
 for i in range(nx):
-    x0=xoffset+i*mx
-    line=probe(x0,yoffset)
-    z0 += float(rdelta.findall(str(line))[0])
-    Z0[i]=z0
+    Z0[i] /= n
     
 for i in range(nx):
     x0=xoffset+i*mx
