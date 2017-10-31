@@ -14,6 +14,7 @@ if(len(sys.argv) > 3):
     ny0=int(sys.argv[3])
 
 numeric="([-+]?(?:(?: \d* \. \d+ )|(?: \d+ \.? )))"
+rB=re.compile("B"+numeric,re.VERBOSE)
 rD=re.compile("D"+numeric,re.VERBOSE)
 rE=re.compile("E"+numeric,re.VERBOSE)
 rX=re.compile("X"+numeric,re.VERBOSE)
@@ -149,19 +150,24 @@ for j in range(ny):
             if not (re.match("M104",line) or re.match("M140",line)) or (j == ny-1 and i == nx-1):
                 sys.stdout.write(line)
 
+B=0
+
 for j in range(ny):
     y0=yoffset+j*(y+my)
     for i in range(nx):
         x0=xoffset+i*(x+mx)
         L=-1
         for line in buffer:
+            lB=rB.findall(line)
+            if len(lB) > 0:
+                B=float(lB[0])
             lL=rL.findall(line)
             if len(lL) > 0:
                 L=int(lL[0])
                 if L == 1:
                     sys.stdout.write("T"+str(lastT)+"\n")
                     sys.stdout.write(line)
-                    sys.stdout.write("G0 B0\nG1 F12000 Y"+str(y0)+"\nG1 F12000 X"+str(x0)+"\n")
+                    sys.stdout.write("G0 B0\nG1 F12000 Y"+str(y0)+"\nG1 F12000 X"+str(x0)+"\nG0 B"+str(B)+"\n")
                     continue
             if L >= 1:
                 lX=rX.findall(line)
