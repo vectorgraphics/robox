@@ -47,9 +47,9 @@ epsilon=5e-4
 threshold=1.0/3.0
 e=1 # extrusion error
 
-#PETG=[False,False]
+PETG=[False,False]
 #PETG=[False,True]
-PETG=[True,False]
+#PETG=[True,False]
 #PETG=[True,True]
 
 #TODO: simplify code
