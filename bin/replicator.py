@@ -151,6 +151,7 @@ for j in range(ny):
                 sys.stdout.write(line)
 
 B=0
+reopen=""
 
 for j in range(ny):
     y0=yoffset+j*(y+my)
@@ -167,7 +168,8 @@ for j in range(ny):
                 if L == 1:
                     sys.stdout.write("T"+str(lastT)+"\n")
                     sys.stdout.write(line)
-                    sys.stdout.write("G0 B0\nG1 F12000 Y"+str(y0)+"\nG1 F12000 X"+str(x0)+"\nG0 B"+str(B)+"\n")
+                    sys.stdout.write("G0 B0\nG1 F12000 Y"+str(y0)+"\nG1 F12000 X"+str(x0)+"\n")
+                    reopen="G0 B"+str(B)+"\n"
                     continue
             if L >= 1:
                 lX=rX.findall(line)
@@ -177,6 +179,9 @@ for j in range(ny):
                 if len(lY) > 0:
                     line=line.replace("Y"+lY[0],"Y"+str(float(lY[0])-Ymin+y0))
                 sys.stdout.write(line)
+                if reopen != "":
+                    sys.stdout.write(reopen)
+                    reopen=""
 
 for line in prologue:
     sys.stdout.write(line)
