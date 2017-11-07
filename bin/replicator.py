@@ -174,12 +174,13 @@ for j in range(ny):
             if L >= 1:
                 lX=rX.findall(line)
                 lY=rY.findall(line)
+                lZ=rZ.findall(line)
                 if len(lX) > 0:
                     line=line.replace("X"+lX[0],"X"+str(float(lX[0])-Xmin+x0))
                 if len(lY) > 0:
                     line=line.replace("Y"+lY[0],"Y"+str(float(lY[0])-Ymin+y0))
                 sys.stdout.write(line)
-                if reopen != "":
+                if len(lZ) > 0 and reopen != "":
                     sys.stdout.write(reopen)
                     reopen=""
 
