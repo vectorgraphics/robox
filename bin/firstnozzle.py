@@ -37,8 +37,8 @@ Heater="M103"
 finish=False
 replenishD="G1 B1 F150 D0.30\n"
 replenishE="G1 B1 F150 E0.30\n"
-primesuffixD="M109\nG36 D0.5 F1000\n"
-primesuffixE="M109\nG36 E0.5 F1000\n"
+primesuffixD="M109\nG36 D0.0 F1000\n"
+primesuffixE="M109\nG36 E0.0 F1000\n"
 
 buffer=[]
 prologue=[]
