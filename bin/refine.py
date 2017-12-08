@@ -213,10 +213,13 @@ for line in fileinput.input():
                     line=line.replace(fs,"F"+str(min(f,1200)))
                     line=line.replace("\n","; Overhang detected in L="+str(L)+" from X"+X0+" Y"+Y0+"\n")
         if L == 0:
-          if petg or outer:
-            line=line.replace(fs,"F"+str(min(f,12*60)))
-          if inner:
-            line=line.replace(fs,"F"+str(min(f,8*60)))
+          if petg:
+            line=line.replace(fs,"F"+str(min(f,6*60)))
+          else:
+            if outer:
+              line=line.replace(fs,"F"+str(min(f,12*60)))
+            if inner:
+              line=line.replace(fs,"F"+str(min(f,8*60)))
         elif L == 1:
           if petg:
             line=line.replace(fs,"F"+str(min(f,21*60)))
