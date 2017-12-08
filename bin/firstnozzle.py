@@ -37,8 +37,8 @@ Heater="M103"
 finish=False
 replenishD="G1 B1 F150 D0.30\n"
 replenishE="G1 B1 F150 E0.30\n"
-primesuffixD="M109\nG36 D0.0 F1000\n"
-primesuffixE="M109\nG36 E0.0 F1000\n"
+#primesuffixD="M109\nG36 D0.0 F1000\n"
+#primesuffixE="M109\nG36 E0.0 F1000\n"
 
 buffer=[]
 prologue=[]
@@ -183,10 +183,10 @@ while count < len(buffer):
                 buffer.insert(count1,Heater+" S0\n")
                 index.insert(count1,index[count1])
                 count += 1
-                if L == 0 and time-index[count1] > primetime:
-                    buffer.insert(count+1,primesuffixD)
-                    index.insert(count,index[count])
-                    count += 1
+#                if L == 0 and time-index[count1] > primetime:
+#                    buffer.insert(count+1,primesuffixD)
+#                    index.insert(count,index[count])
+#                    count += 1
             i=max(count1+1,bisect_left(index,time-pretime))
             if i > start and i < len(index):
                 buffer.insert(i,Heater+" S\n")
@@ -200,10 +200,10 @@ while count < len(buffer):
                 buffer.insert(count0,Heater+" T0\n")
                 index.insert(count0,index[count0])
                 count += 1
-                if L == 0 and time-index[count0] > primetime:
-                    buffer.insert(count+1,primesuffixE)
-                    index.insert(count,index[count])
-                    count += 1
+#                if L == 0 and time-index[count0] > primetime:
+#                    buffer.insert(count+1,primesuffixE)
+#                    index.insert(count,index[count])
+#                    count += 1
             i=max(count0+1,bisect_left(index,time-pretime))
             if i > start and i < len(index):
                 buffer.insert(i,Heater+" T\n")
