@@ -1,9 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import fileinput
 import sys
 import re
 import math
 import os
+from pathlib import Path
 
 numeric="([-+]?(?:(?: \d* \. \d+ )|(?: \d+ \.? )))"
 rX=re.compile("X"+numeric,re.VERBOSE)
@@ -21,6 +22,7 @@ inner=False
 outer=False
 support=False
 
+digits=5
 distance=5
 B=""
 F=""
@@ -47,16 +49,20 @@ epsilon=5e-4
 threshold=1.0/3.0
 e=1 # extrusion error
 
+#zdelta=-0.13
+zdelta=0;
+
 #PETG=[False,False]
-#PETG=[False,True]
-PETG=[True,False]
+PETG=[False,True]
+#PETG=[True,False]
 #PETG=[True,True]
 
 #TODO: simplify code
 
 if(PETG[0] == True):
   primeDLength=8
-  firstDfactor=1.1
+#  firstDfactor=1.1
+  firstDfactor=1.0
 #  incr[0]=0.04
 else:
   primeDLength=0
@@ -64,24 +70,29 @@ else:
 
 if(PETG[1] == True):
   primeELength=8
-  firstEfactor=1.1
+#  firstEfactor=1.1
+  firstEfactor=1.0
 #  incr[1]=0.04
 else:
   primeELength=0
   firstEfactor=1.0
 
-file=open(os.path.expanduser("~/map.dat"), "r")
-x=[float(a) for a in file.readline().split()]
-y=[float(a) for a in file.readline().split()]
-z=[[float(a) for a in line.split()] for line in file]
+path=Path(os.path.expanduser("~/map.dat"));
+mapping=path.is_file()
 
-xm=x[0]
-ym=y[0]
-dx=x[1]-xm
-dy=y[1]-ym
-nx=len(x)-1
-ny=len(y)-1
+if mapping:
+  file=open(path,"r")
+  x=[float(a) for a in file.readline().split()]
+  y=[float(a) for a in file.readline().split()]
+  z=[[float(a) for a in line.split()] for line in file]
 
+  xm=x[0]
+  ym=y[0]
+  dx=x[1]-xm
+  dy=y[1]-ym
+  nx=len(x)-1
+  ny=len(y)-1
+  
 def height0(x,y):
   if(x < xm):
     x=xm
@@ -99,7 +110,8 @@ def height0(x,y):
     y=1
   return z[i][j]*(1-x)*(1-y)+z[i+1][j]*x*(1-y)+z[i][j+1]*(1-x)*y+z[i+1][j+1]*x*y
 
-xlevel=(height0(190,75)-height0(20,75))/2
+if mapping:
+  xlevel=(height0(190,75)-height0(20,75))/2-zdelta;
 
 Nx=2
 Xm=20
@@ -174,7 +186,7 @@ for line in fileinput.input():
     lT=rT.findall(line)
     if len(lT) > 0:
       T=int(lT[0])
-    if L == 0 and len(lX) > 0 and len(lY) > 0:
+    if mapping and L == 0 and len(lX) > 0 and len(lY) > 0:
       line=line.replace("Y"+Y,"Y"+Y+" Z"+str(round(Z+height(float(X),float(Y)),3)))
     if L > 0 and len(lZ) > 0:
         line=line.replace("Z"+lZ[0],"Z"+str(Z+incr[T]))
@@ -218,7 +230,7 @@ for line in fileinput.input():
           else:
             if outer:
               line=line.replace(fs,"F"+str(min(f,12*60)))
-            if inner:
+            elif inner:
               line=line.replace(fs,"F"+str(min(f,8*60)))
         elif L == 1:
           if petg:
@@ -230,15 +242,16 @@ for line in fileinput.input():
             else:
               line=line.replace(fs,"F"+str(min(f,30*60)))
           else:
-            line=line.replace(fs,"F"+str(min(f,40*60)))
+#            line=line.replace(fs,"F"+str(min(f,40*60)))
+            line=line.replace(fs,"F"+str(min(f,30*60)))
         elif short:
           if petg:
-            line=line.replace(fs,"F"+str(min(f,30*60)))
+            line=line.replace(fs,"F"+str(min(f,20*60)))
           else:
             line=line.replace(fs,"F"+str(min(f,40*60)))
         elif petg:
           if inner or outer:
-            line=line.replace(fs,"F"+str(min(f,25*60)))
+            line=line.replace(fs,"F"+str(min(f,20*60)))
           elif fill:
             line=line.replace(fs,"F"+str(min(f,73*60)))
 
@@ -251,17 +264,16 @@ for line in fileinput.input():
             replenishD=float(lD[0])
     else:
         if len(lE) > 0:
-#          if L == 0 and skin:
-          if L == 0:
+          if L == 0 and skin:
             old=lE[0]
-            lE[0]=str(firstEfactor*float(lE[0]))
+            lE[0]=str(round(firstEfactor*float(lE[0]),digits))
             line=line.replace("E"+old,"E"+lE[0])
           replenishD=0
           primeD=0
           E=float(lE[0])
           if replenishE > 0:
             E += replenishE
-            line=line.replace("E"+lE[0],"E"+str(E))
+            line=line.replace("E"+lE[0],"E"+str(round(E,digits)))
             replenishE=0
             if L == 0:
               primeE=primeELength
@@ -271,14 +283,14 @@ for line in fileinput.input():
         if len(lD) > 0:
           if L == 0 and skin:
             old=lD[0]
-            lD[0]=str(firstDfactor*float(lD[0]))
+            lD[0]=str(round(firstDfactor*float(lD[0]),digits))
             line=line.replace("D"+old,"D"+lD[0])
           replenishE=0
           primeE=0
           D=float(lD[0])
           if replenishD > 0:
             D += replenishD
-            line=line.replace("D"+lD[0],"D"+str(D))
+            line=line.replace("D"+lD[0],"D"+str(round(D,digits)))
             replenishD=0
             if L == 0:
               primeD=primeDLength
