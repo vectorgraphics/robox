@@ -27,9 +27,14 @@ buffer=[]
 prologue=[]
 
 Length=205
-Width=150
 
-ygap=12
+# For 210mm*151mm*1mm PEI sheet
+#Width=150
+#ygap=12 # For 210mm*151mm*1mm PEI sheet
+
+# For 210mm*150mm*3mm glass sheet
+Width=149 
+ygap=8
 
 Xmin=Length
 Ymin=Width

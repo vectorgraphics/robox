@@ -1,0 +1,6 @@
+#!/bin/sh
+cd ~/CEL\ Robox/PrintJobs
+job=`/bin/ls -t | head -1`
+mkdir -p ~/gcode
+ln -sf ~/CEL\ Robox/PrintJobs/$job/$job\_robox.gcode ~/gcode/job.gcode
+
