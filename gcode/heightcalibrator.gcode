@@ -1,17 +1,17 @@
 G90
 T0
 
-G0 Z4
-G0 X20 Y75		;Level Gantry Position 1
-G28 Z			;Home Z
-G0 Z4 			;Move up 4mm
-G0 X190 Y75		;Level Gantry Position 2
-G28 Z			;Home Z
-G0 Z4 			;Move up 4mm
-G38 			;Level gantry
+;G0 Z4
+;G0 X20 Y75		;Level Gantry Position 1
+;G28 Z			;Home Z
+;G0 Z4 			;Move up 4mm
+;G0 X190 Y75		;Level Gantry Position 2
+;G28 Z			;Home Z
+;G0 Z4 			;Move up 4mm
+;G38 			;Level gantry
 
-T1 X107
 G0 Z2
+T1 X107 Y75
 G28 Z
 G0 Z2
 
