@@ -42,7 +42,7 @@ subprocess.check_output(["rbx","gcode","G0 Z2"])
 subprocess.check_output(["rbx","gcode","G0 X105Y75"])
 subprocess.check_output(["rbx","gcode","T0"])
 subprocess.check_output(["rbx","gcode","M107"])
-#subprocess.check_output(["rbx","gcode","M190"])
+subprocess.check_output(["rbx","gcode","M190"])
 
 for i in range(nx):
     sys.stdout.write(str(xoffset+i*mx)+" ")
@@ -57,7 +57,6 @@ def probe(x0,y0):
     subprocess.check_output(["rbx","gcode","G28 Z"])
 #    wait()
     subprocess.check_output(["rbx","gcode","G0 Z2"])
-    sys.stdout.write(str(subprocess.check_output(["rbx","gcode","M113"]))+"\n")
     return subprocess.check_output(["rbx","gcode","M113"])
 
 subprocess.check_output(["rbx","gcode","G39"])
