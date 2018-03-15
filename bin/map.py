@@ -32,8 +32,6 @@ def wait():
         line=str(subprocess.check_output(["rbx","status"]))
         if re.match("b'Printer idle",line):
             break
-        else:
-            sys.stdout.write(line+"\n")
     return
 
 subprocess.check_output(["rbx","gcode","M139"])
@@ -55,7 +53,7 @@ def probe(x0,y0):
     subprocess.check_output(["rbx","gcode","G0 Z2"])
     subprocess.check_output(["rbx","gcode","G0 X"+str(x0)+"Y"+str(y0)])
     subprocess.check_output(["rbx","gcode","G28 Z"])
-#    wait()
+    wait()
     subprocess.check_output(["rbx","gcode","G0 Z2"])
     return subprocess.check_output(["rbx","gcode","M113"])
 
