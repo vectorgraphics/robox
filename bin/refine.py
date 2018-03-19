@@ -57,25 +57,23 @@ PETG=[False,True]
 #PETG=[True,False]
 #PETG=[True,True]
 
-#TODO: simplify code
+firstDfactor=1.0
+firstEfactor=1.0
+
+#PETGincr=0.15
+PETGincr=0.1
 
 if(PETG[0] == True):
   primeDLength=8
-#  firstDfactor=1.1
-  firstDfactor=1.0
-#  incr[0]=0.04
+  incr[0]=PETGincr
 else:
   primeDLength=0
-  firstDfactor=1.0
 
 if(PETG[1] == True):
   primeELength=8
-#  firstEfactor=1.1
-  firstEfactor=1.0
-#  incr[1]=0.04
+  incr[1]=PETGincr
 else:
   primeELength=0
-  firstEfactor=1.0
 
 path=Path(os.path.expanduser("~/map.dat"));
 mapping=path.is_file()
@@ -187,9 +185,8 @@ for line in fileinput.input():
     if len(lT) > 0:
       T=int(lT[0])
     if mapping and L == 0 and len(lX) > 0 and len(lY) > 0:
-      line=line.replace("Y"+Y,"Y"+Y+" Z"+str(round(Z+height(float(X),float(Y)),3)))
+      line=line.replace("Y"+Y,"Y"+Y+" Z"+str(round(Z+incr[T]+height(float(X),float(Y)),3)))
     if L > 0 and len(lZ) > 0:
-        line=line.replace("Z"+lZ[0],"Z"+str(Z+incr[T]))
         if(Z != lastZ):
             if(Z > lastZ):
                 previous=current
