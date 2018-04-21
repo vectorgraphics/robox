@@ -33,7 +33,7 @@ Length=205
 #ygap=12 # For 210mm*151mm*1mm PEI sheet
 
 # For 210mm*150mm*3mm glass sheet
-Width=149 
+Width=148 
 ygap=8
 
 Xmin=Length
