@@ -62,6 +62,7 @@ sys.stdout.write("\n")
 sys.stdout.flush()
 
 def probe(x0,y0):
+    subprocess.check_output(["rbx","gcode","G90"])
     subprocess.check_output(["rbx","gcode","G0 Z2"])
     subprocess.check_output(["rbx","gcode","G0 X"+str(x0)+"Y"+str(y0)])
     subprocess.check_output(["rbx","gcode","G28 Z"])
