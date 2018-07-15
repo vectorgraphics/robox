@@ -60,7 +60,7 @@ PETG=[False,True]
 firstDfactor=1.0
 firstEfactor=1.0
 
-PETGincr=0.0
+PETGincr=0.15
 
 if(PETG[0] == True):
   primeDLength=8
