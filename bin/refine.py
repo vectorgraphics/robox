@@ -52,8 +52,8 @@ e=1 # extrusion error
 #zdelta=-0.13
 zdelta=0;
 
-#PETG=[False,False]
-PETG=[False,True]
+PETG=[False,False]
+#PETG=[False,True]
 #PETG=[True,False]
 #PETG=[True,True]
 

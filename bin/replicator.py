@@ -28,12 +28,9 @@ prologue=[]
 
 Length=205
 
-# For 210mm*151mm*1mm PEI sheet
 #Width=150
-#ygap=12 # For 210mm*151mm*1mm PEI sheet
-
-# For 210mm*150mm*3mm glass sheet
-Width=148 
+#Width=148
+Width=141 # Avoid cool back edge 
 ygap=8
 
 Xmin=Length
@@ -100,6 +97,8 @@ for line in buffer:
         X0=max(X0,X+12+offset)
         Y0=max(Y0,Y+14)
     else:
+        if(Ymax-Ymin > 45):
+            offset += 2
         X0=max(X0,X+19+offset)
         Y0=max(Y0,Y+min(31,21+10*(Z-10)/20))
 

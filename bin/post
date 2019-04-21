@@ -2,5 +2,5 @@
 cd ~/CEL\ Robox/PrintJobs
 job=`/bin/ls -t | head -1`
 mkdir -p ~/gcode
-refine.py $job/$job\_robox.gcode > ~/gcode/currentjob.gcode
-
+ln -sf ~/CEL\ Robox/PrintJobs/$job/$job\_robox.gcode ~/gcode/job.gcode
+refine.py < $job/$job\_robox.gcode > ~/gcode/currentjob.gcode
