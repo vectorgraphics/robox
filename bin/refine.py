@@ -52,8 +52,11 @@ e=1 # extrusion error
 #zdelta=-0.13
 zdelta=0;
 
-startres=1800
-stopres=2200
+startres=1700
+stopres=2300
+
+startres2=3500
+stopres2=4500
 
 PETG=[False,False]
 #PETG=[False,True]
@@ -208,7 +211,8 @@ for line in fileinput.input():
         x0=float(X0)
         y=float(Y)
         y0=float(Y0)
-        short=(x-x0)**2+(y-y0)**2 <= distance*distance
+        length2=(x-x0)**2+(y-y0)**2
+        short=length2 <= distance*distance
         f0=lF[0]
         fs="F"+f0
         f=float(f0)
@@ -263,10 +267,12 @@ for line in fileinput.input():
             min(f,73*60)
             line=line.replace(fs,"F"+str(f))
         if(len(lF) > 0 and y != y0):
-          if(f > startres and f < stopres):
-            line=line.replace(fs,"F"+str(startres))
-          if(f > 2*startres and f < 2*stopres):
-            line=line.replace(fs,"F"+str(2*startres))
+          factor=abs(y-y0)/math.sqrt(length2)
+          fy=f*factor
+          if(fy > startres and fy < stopres):
+            line=line.replace(fs,"F"+str(int(startres/factor)))
+          if(fy > startres2 and fy < stopres2):
+            line=line.replace(fs,"F"+str(int(startres2/factor)))
 
     lB=rB.findall(line)
     if re.match("G1 [^B]*B1",line):
