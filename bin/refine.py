@@ -52,8 +52,8 @@ e=1 # extrusion error
 #zdelta=-0.13
 zdelta=0;
 
-startres=1300
-stopres=4300
+startres=1800
+stopres=2200
 
 PETG=[False,False]
 #PETG=[False,True]
@@ -265,6 +265,8 @@ for line in fileinput.input():
         if(len(lF) > 0 and y != y0):
           if(f > startres and f < stopres):
             line=line.replace(fs,"F"+str(startres))
+          if(f > 2*startres and f < 2*stopres):
+            line=line.replace(fs,"F"+str(2*startres))
 
     lB=rB.findall(line)
     if re.match("G1 [^B]*B1",line):
