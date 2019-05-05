@@ -52,6 +52,9 @@ e=1 # extrusion error
 #zdelta=-0.13
 zdelta=0;
 
+startres=1300
+stopres=4300
+
 PETG=[False,False]
 #PETG=[False,True]
 #PETG=[True,False]
@@ -72,7 +75,7 @@ if(PETG[1] == True):
   primeELength=8
   incr[1]=PETGincr
 else:
-  primeELength=0
+  primeELength=8 #Test for Batseeker, need to generalize
 
 path=Path(os.path.expanduser("~/map.dat"));
 mapping=path.is_file()
@@ -198,7 +201,7 @@ for line in fileinput.input():
     lD=rD.findall(line)
     lE=rE.findall(line)
     petg=PETG[T]
-    if re.match("G1",line) and len(lF) > 0 and lF[0] != "12000":
+    if re.match("G1",line) and len(lF) > 0 and float(lF[0]) != 12000:
 #        if lastinterface and petg and not support:
 #            line=line.replace(fs,"F"+str(min(f,25*60)))
         x=float(X)
@@ -208,7 +211,7 @@ for line in fileinput.input():
         short=(x-x0)**2+(y-y0)**2 <= distance*distance
         f0=lF[0]
         fs="F"+f0
-        f=int(f0)
+        f=float(f0)
         if petg and (len(lD) > 0 or len(lE) > 0):
             current.append([x0,y0,x,y])
             if len(previous) > 0:
@@ -222,34 +225,46 @@ for line in fileinput.input():
                     line=line.replace("\n","; Overhang detected in L="+str(L)+" from X"+X0+" Y"+Y0+"\n")
         if L == 0:
           if petg:
-            line=line.replace(fs,"F"+str(min(f,4*60)))
+            f=min(f,4*60)
+            line=line.replace(fs,"F"+str(f))
           else:
-            if outer:
-              line=line.replace(fs,"F"+str(min(f,12*60)))
-            elif inner:
-              line=line.replace(fs,"F"+str(min(f,8*60)))
+            if inner or outer:
+              f=min(f,8*60)
+              line=line.replace(fs,"F"+str(f))
         elif L == 1:
           if petg:
-            line=line.replace(fs,"F"+str(min(f,21*60)))
+            f=min(f,21*60)
+            line=line.replace(fs,"F"+str(f))
         elif skin:
           if petg:
             if short:
-              line=line.replace(fs,"F"+str(min(f,14*60)))
+              f=min(f,14*60)
+              line=line.replace(fs,"F"+str(f))
             else:
-              line=line.replace(fs,"F"+str(min(f,30*60)))
+              f=min(f,20*60)
+              line=line.replace(fs,"F"+str(f))
           else:
 #            line=line.replace(fs,"F"+str(min(f,40*60)))
-            line=line.replace(fs,"F"+str(min(f,30*60)))
+#            line=line.replace(fs,"F"+str(min(f,30*60)))
+            f=min(f,20*60)
+            line=line.replace(fs,"F"+str(f))
         elif short:
           if petg:
-            line=line.replace(fs,"F"+str(min(f,20*60)))
+            f=min(f,20*60)
+            line=line.replace(fs,"F"+str(f))
           else:
-            line=line.replace(fs,"F"+str(min(f,40*60)))
+            f=min(f,40*60)
+            line=line.replace(fs,"F"+str(f))
         elif petg:
           if inner or outer:
-            line=line.replace(fs,"F"+str(min(f,20*60)))
+            f=min(f,20*60)
+            line=line.replace(fs,"F"+str(f))
           elif fill:
-            line=line.replace(fs,"F"+str(min(f,73*60)))
+            min(f,73*60)
+            line=line.replace(fs,"F"+str(f))
+        if(len(lF) > 0 and y != y0):
+          if(f > startres and f < stopres):
+            line=line.replace(fs,"F"+str(startres))
 
     lB=rB.findall(line)
     if re.match("G1 [^B]*B1",line):
@@ -271,9 +286,10 @@ for line in fileinput.input():
             E += replenishE
             line=line.replace("E"+lE[0],"E"+str(round(E,digits)))
             replenishE=0
-            if L == 0:
-              primeE=primeELength
-          if L == 0 and primeE > 0:
+#            if L == 0:
+          primeE=primeELength
+#          if L == 0 and primeE > 0:
+          if primeE > 0:
             line=line.replace(fs,"F"+str(min(f,480)))
             primeE -= min(primeE,E)
         if len(lD) > 0:
@@ -288,9 +304,10 @@ for line in fileinput.input():
             D += replenishD
             line=line.replace("D"+lD[0],"D"+str(round(D,digits)))
             replenishD=0
-            if L == 0:
-              primeD=primeDLength
-          if L == 0 and primeD > 0:
+          #  if L == 0:
+            primeD=primeDLength
+#          if L == 0 and primeD > 0:
+          if primeD > 0:
             line=line.replace(fs,"F"+str(min(f,480)))
             primeD -= min(primeD,D)
         sys.stdout.write(line)

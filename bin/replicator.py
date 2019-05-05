@@ -30,8 +30,8 @@ Length=205
 
 #Width=150
 #Width=148
-Width=141 # Avoid cool back edge 
-ygap=8
+Width=144 # Avoid cool back edge 
+ygap=10
 
 Xmin=Length
 Ymin=Width
@@ -118,8 +118,6 @@ if(nx0 > 0):
     nx=min(nx,nx0)
 if(ny0 > 0):
     ny=min(ny,ny0)
-
-ygap=11
 
 xoffset=(X-nx*x-(nx-1)*mx)/2
 yoffset=ygap+(Y-ny*y-(ny-1)*my)/2
