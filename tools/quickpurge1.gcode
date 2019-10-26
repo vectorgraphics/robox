@@ -10,15 +10,15 @@ M106			;Fan on
 
 G36 E1000 F12000 ; Un-Park
 
-G0 X200 Y25
+G0 X200 Y16
 Macro:Purge_T1
-G0 X200 Y55
+G0 X200 Y20
 Macro:Purge_T1
-G0 X200 Y85
+G0 X200 Y24
 Macro:Purge_T1
-G0 X200 Y115
+G0 X200 Y28
 Macro:Purge_T1
-G0 X200 Y145
+G0 X200 Y32
 Macro:Purge_T1
 
 Macro:Finish-Abort_Print

@@ -78,7 +78,7 @@ if(PETG[1] == True):
   primeELength=8
   incr[1]=PETGincr
 else:
-  primeELength=8 #Test for Batseeker, need to generalize
+  primeELength=0
 
 path=Path(os.path.expanduser("~/map.dat"));
 mapping=path.is_file()
