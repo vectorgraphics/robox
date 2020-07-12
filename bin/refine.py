@@ -248,8 +248,6 @@ for line in fileinput.input():
               f=min(f,20*60)
               line=line.replace(fs,"F"+str(f))
           else:
-#            line=line.replace(fs,"F"+str(min(f,40*60)))
-#            line=line.replace(fs,"F"+str(min(f,30*60)))
             f=min(f,20*60)
             line=line.replace(fs,"F"+str(f))
         elif short:
@@ -257,7 +255,7 @@ for line in fileinput.input():
             f=min(f,20*60)
             line=line.replace(fs,"F"+str(f))
           else:
-            f=min(f,40*60)
+            f=min(f,38*60)
             line=line.replace(fs,"F"+str(f))
         elif petg:
           if inner or outer:
